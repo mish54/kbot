@@ -2,6 +2,8 @@ import aiohttp
 import asyncio
 import json
 from api_calls.get_guild_members import Members
+from api_calls.get_killers import Killers
+from api_calls.get_victims import Victims
 
 
 async def fetch(session, url):
@@ -11,15 +13,15 @@ async def fetch(session, url):
 
 async def main():
 	members = await Members.get_members()
-	killers =
-	victims =
+	killers = await Killers.get_members()
+	victims = await Victims.get_members()
 	async with aiohttp.ClientSession() as session:
 		html = await fetch(session, 'https://gameinfo.albiononline.com/api/gameinfo/events?limit=1&offset=0')
 		json_out = json.loads(html)
-		for i in json_out[0]["Participants"]:
-			#print(f"Victim: {json_out[0]['Victim']['Name']}")
-			#print(f"Participants: \nGuildname: {i['GuildName']} \nPlayername: {i['Name']}")
-			print(members[-1])
+		print(members[-1])
+		print(f"Victim {victims[-1]}")
+		print(f"Killer {killers[-1]}")
+
 
 
 if __name__ == '__main__':

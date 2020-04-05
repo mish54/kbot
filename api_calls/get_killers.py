@@ -17,7 +17,7 @@ class Killers:
 	async def get_members():
 		current_killer_ids = []
 		async with aiohttp.ClientSession() as session:
-			html = await Killers.fetch(session, f'https://gameinfo.albiononline.com/api/gameinfo/guilds/uatVVzFyQjqf_H_Bfl8i2A/members')
+			html = await Killers.fetch(session, f'https://gameinfo.albiononline.com/api/gameinfo/events?limit=51&offset=0')
 			json_out = json.loads(html)
 			for i in json_out:
 				current_killer_ids.append(i["Killer"]["Id"])
