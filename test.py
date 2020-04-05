@@ -2,8 +2,8 @@ import os
 
 import discord
 from dotenv import load_dotenv
-
-import aiohttp
+import asyncio
+from api_calls.get_info_json import Kills
 
 load_dotenv()
 
@@ -16,6 +16,7 @@ client = discord.Client()
 @client.event
 async def on_ready():
 	print(f"{client.user.name} has connected to discord!")
+	client.loop.create_task(on_message())
 
 
 @client.event
@@ -27,14 +28,19 @@ async def on_member_join(member):
 
 
 @client.event
-async def on_message(message):
-	if message.author == client.user:
-		return
+async def on_message():
+	await client.wait_until_ready()
+	channel = client.get_channel(696073839939026945)
 
-	quote = "ervweijnbwrotbinworinvweorneworvinero"
+	while not client.is_closed():
 
-	if message.content == "10!":
-		await message.channel.send(file=discord.File("picture.png"))
+		await channel.send("Fetching...")
+		kills = await Kills.main()
+		try:
+			await channel.send(kills)
+		except discord.errors.HTTPException:
+			print("Nothing to report")
+		await asyncio.sleep(10)
 
 
 client.run(TOKEN)
