@@ -34,7 +34,7 @@ async def on_message():
 			await channel.send(kills)
 		except discord.errors.HTTPException:
 			print("Nothing to report")
-		await asyncio.sleep(2)
+		await asyncio.sleep(1)
 
 
 client.run(TOKEN)
