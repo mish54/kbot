@@ -7,6 +7,8 @@ from api_calls.get_info_json import Kills
 
 load_dotenv()
 
+kill = Kills()
+
 TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD = os.getenv("DISCORD_GUILD")
 client = discord.Client()
@@ -35,12 +37,12 @@ async def on_message():
 	while not client.is_closed():
 
 		#await channel.send("Fetching...")
-		kills = await Kills.main()
+		kills = await kill.main()
 		try:
 			await channel.send(kills)
 		except discord.errors.HTTPException:
 			print("Nothing to report")
-		await asyncio.sleep(5)
+		await asyncio.sleep(2)
 
 
 client.run(TOKEN)
