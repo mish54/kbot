@@ -22,7 +22,7 @@ class Kills:
 			try:
 				json_out = json.loads(html)
 				for i in json_out:
-					if i["Killer"]["Id"] in self.members:
+					if i["Killer"]["Id"] in self.members and i["EventId"] not in self.already_displayed:
 						print("We have a killer")
 						stats = {}
 						date = i["TimeStamp"].split("T")[0]
@@ -37,7 +37,7 @@ class Kills:
 						self.already_displayed.append(i["EventId"])
 						return stats
 
-					elif i["Victim"]["Id"] in self.members:
+					elif i["Victim"]["Id"] in self.members and i["EventId"] not in self.already_displayed:
 						print("We have a victim")
 						stats = {}
 						date = i["TimeStamp"].split("T")[0]
