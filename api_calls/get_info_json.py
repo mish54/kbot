@@ -16,7 +16,7 @@ class Kills:
 
 	@staticmethod
 	async def main():
-		members = await Members.get_members()
+		members = Members.members
 		async with aiohttp.ClientSession() as session:
 			html = await Kills.fetch(session, 'https://gameinfo.albiononline.com/api/gameinfo/events?limit=51&offset=0')
 			try:
