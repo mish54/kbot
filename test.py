@@ -22,14 +22,6 @@ async def on_ready():
 
 
 @client.event
-async def on_member_join(member):
-	await member.crate_dm()
-	await member.dm_channel.send(
-		f"Hi {member.name} welcome to the server!"
-	)
-
-
-@client.event
 async def on_message():
 	await client.wait_until_ready()
 	channel = client.get_channel(628899744617332737)
