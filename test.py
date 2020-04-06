@@ -34,13 +34,13 @@ async def on_message():
 
 	while not client.is_closed():
 
-		await channel.send("Fetching...")
+		#await channel.send("Fetching...")
 		kills = await Kills.main()
 		try:
 			await channel.send(kills)
 		except discord.errors.HTTPException:
 			print("Nothing to report")
-		await asyncio.sleep(10)
+		await asyncio.sleep(5)
 
 
 client.run(TOKEN)

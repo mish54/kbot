@@ -1,6 +1,6 @@
 import aiohttp
 import json
-
+from json import JSONDecodeError
 
 class Members:
 
@@ -18,8 +18,10 @@ class Members:
 		current_member_ids = []
 		async with aiohttp.ClientSession() as session:
 			html = await Members.fetch(session, f'https://gameinfo.albiononline.com/api/gameinfo/guilds/uatVVzFyQjqf_H_Bfl8i2A/members')
-			json_out = json.loads(html)
-			for i in json_out:
-				current_member_ids.append(i["Id"])
-
+			try:
+				json_out = json.loads(html)
+				for i in json_out:
+					current_member_ids.append(i["Id"])
+			except JSONDecodeError:
+				pass
 		return current_member_ids
