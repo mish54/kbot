@@ -33,7 +33,7 @@ class Kills:
 						stats["Meno_vraha"] = i["Killer"]["Name"]
 						stats["Vrah_byl_vodkad"] = i["Killer"]["GuildName"]
 						stats["Jak_byl_silnej"] = i["Killer"]["AverageItemPower"]
-						stats["Gdo_tam_byl_este"] = [i["Participants"][0]["Name"]]
+						#stats["Gdo_tam_byl_este"] = [i["Participants"][0]["Name"]]
 						self.already_displayed.append(i["EventId"])
 						return stats
 
@@ -48,7 +48,7 @@ class Kills:
 						stats["Meno_vraha"] = i["Killer"]["Name"]
 						stats["Vrah_byl_vodkad"] = i["Killer"]["GuildName"]
 						stats["Jak_byl_silnej"] = i["Killer"]["AverageItemPower"]
-						stats["Gdo_tam_byl_este"] = [i["Participants"][0]["Name"]]
+						#stats["Gdo_tam_byl_este"] = [i["Participants"][0]["Name"]]
 						self.already_displayed.append(i["EventId"])
 						return stats
 
