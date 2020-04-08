@@ -1,5 +1,5 @@
 import aiohttp
-import requests
+from aiohttp.client_exceptions import ClientConnectionError
 from json import JSONDecodeError
 import json
 from api_calls.get_guild_members import Members
@@ -18,7 +18,11 @@ class Kills:
 
 	async def main(self):
 		async with aiohttp.ClientSession() as session:
-			html = await Kills.fetch(session, 'https://gameinfo.albiononline.com/api/gameinfo/events?limit=51&offset=0')
+			try:
+				html = await Kills.fetch(session, 'https://gameinfo.albiononline.com/api/gameinfo/events?limit=51&offset=0')
+			except ClientConnectionError:
+				print("Client exception error, continuing...")
+				pass
 			try:
 				json_out = json.loads(html)
 				for i in json_out:
