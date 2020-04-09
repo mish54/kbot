@@ -1,5 +1,6 @@
 import aiohttp
 from aiohttp.client_exceptions import ClientConnectionError
+import io
 from json import JSONDecodeError
 import json
 from api_calls.get_guild_members import Members
@@ -39,9 +40,9 @@ class Kills:
 							except TypeError:
 								pass
 						items_dict = {"killer": killer_items}
-						for victim_item in i["Killer"]["Equipment"]:
+						for victim_item in i["Victim"]["Equipment"]:
 							try:
-								victim_items.append(i["Killer"]["Equipment"][victim_item]["Type"])
+								victim_items.append(i["Victim"]["Equipment"][victim_item]["Type"])
 							except TypeError:
 								pass
 						items_dict["victim"] = victim_items
@@ -71,9 +72,9 @@ class Kills:
 							except TypeError:
 								pass
 						items_dict = {"killer": killer_items}
-						for victim_item in i["Killer"]["Equipment"]:
+						for victim_item in i["Victim"]["Equipment"]:
 							try:
-								victim_items.append(i["Killer"]["Equipment"][victim_item]["Type"])
+								victim_items.append(i["Victim"]["Equipment"][victim_item]["Type"])
 							except TypeError:
 								pass
 						items_dict["victim"] = victim_items

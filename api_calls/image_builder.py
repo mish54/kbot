@@ -1,5 +1,5 @@
 import requests
-from PIL import Image, ImageFont, ImageDraw
+from PIL import Image, ImageDraw
 from io import BytesIO
 
 
@@ -30,4 +30,7 @@ def get_images(items, killer, victim, time, gilda_killer, gilda_victim, ip_kille
     img_draw.text((274, 10), f'Gilda: {gilda_victim}', fill='white')
     img_draw.text((20, 20), f'IP: {ip_killer}', fill='white')
     img_draw.text((274, 20), f'IP: {ip_victim}', fill='white')
-    return dest
+    arr = BytesIO()
+    dest.save(arr, format='PNG')
+    arr.seek(0)
+    return arr
