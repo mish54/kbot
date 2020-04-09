@@ -28,12 +28,15 @@ async def on_message():
 
 	while not client.is_closed():
 
-		#await channel.send("Fetching...")
 		kills = await kill.main()
-		try:
-			await channel.send(kills)
-		except discord.errors.HTTPException:
-			print("Nothing to report")
+		if kills is not None:
+			try:
+				file = discord.File(kills, filename="kills.png")
+				await channel.send("Kill.png", file=file)
+			except discord.errors.HTTPException:
+				print("Nothing to report")
+		else:
+			print("got none")
 		await asyncio.sleep(1)
 
 
