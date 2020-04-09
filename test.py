@@ -24,7 +24,7 @@ async def on_ready():
 @client.event
 async def on_message():
 	await client.wait_until_ready()
-	channel = client.get_channel(696073839939026945)
+	channel = client.get_channel(628899744617332737)
 
 	while not client.is_closed():
 
