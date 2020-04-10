@@ -27,18 +27,18 @@ async def on_message():
 	await client.wait_until_ready()
 	channel = client.get_channel(628899744617332737)
 
-	kills = Kills()
+	pvp_kills = PVP_Kills() # pocatecni inicializace kills
 	while not client.is_closed():
-		await kills.main()
-		if len(kills.kills_to_print) == 0:
+		await pvp_kills.main()
+		if len(pvp_kills.kills_to_print) == 0:
 			try:
-				# TODO
-				file = discord.File(kills.kills_to_print, filename="kills.png")
+				# TODO upravit obrazky
+				file = discord.File(pvp_kills.kills_to_print, filename="kills.png")
 				await channel.send("Kill.png", file=file)
 			except discord.errors.HTTPException:
 				print("Nothing to report")
 		else:
-			print("got none")
+			print("No new PvP kill for selected guild.")
 		await asyncio.sleep(1)
 
 
