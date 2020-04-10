@@ -27,12 +27,13 @@ async def on_message():
 	await client.wait_until_ready()
 	channel = client.get_channel(628899744617332737)
 
+	kills = Kills()
 	while not client.is_closed():
-
-		kills = await kill.main()
-		if kills is not None:
+		await kills.main()
+		if len(kills.kills_to_print) == 0:
 			try:
-				file = discord.File(kills, filename="kills.png")
+				# TODO
+				file = discord.File(kills.kills_to_print, filename="kills.png")
 				await channel.send("Kill.png", file=file)
 			except discord.errors.HTTPException:
 				print("Nothing to report")

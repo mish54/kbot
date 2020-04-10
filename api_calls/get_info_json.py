@@ -3,15 +3,14 @@ from aiohttp.client_exceptions import ClientConnectionError
 import io
 from json import JSONDecodeError
 import json
-from api_calls.get_guild_members import Members
-from api_calls.image_builder import get_images
 
+from api_calls.image_builder import get_images
+import api_calls.variables
 
 class Kills:
 	def __init__(self):
-		self.members = Members().members
-		self.already_displayed = []
-		print(self.members[1])
+		self.kills_to_print = []
+		self.last_kill_id = -1
 
 	@staticmethod
 	async def fetch(session, url):
@@ -26,70 +25,71 @@ class Kills:
 			except:
 				print("Client exception error, continuing...")
 				pass
+
 			try:
 				json_out = json.loads(html)
-				for i in json_out:
-					if i["Killer"]["Id"] in self.members and i["EventId"] not in self.already_displayed:
+				for kill in json_out:
+					if kill["Killer"]["GuildId"] is GUILD_ID and kill["EventId"] not in self.kills_to_print:
 						print("We have a killer")
 						stats = {}
 						killer_items = []
 						victim_items = []
-						for killer_item in i["Killer"]["Equipment"]:
+						for killer_item in kill["Killer"]["Equipment"]:
 							try:
-								killer_items.append(i["Killer"]["Equipment"][killer_item]["Type"])
+								killer_items.append(kill["Killer"]["Equipment"][killer_item]["Type"])
 							except TypeError:
 								pass
 						items_dict = {"killer": killer_items}
-						for victim_item in i["Victim"]["Equipment"]:
+						for victim_item in kill["Victim"]["Equipment"]:
 							try:
-								victim_items.append(i["Victim"]["Equipment"][victim_item]["Type"])
+								victim_items.append(kill["Victim"]["Equipment"][victim_item]["Type"])
 							except TypeError:
 								pass
 						items_dict["victim"] = victim_items
-						date = i["TimeStamp"].split("T")[0]
-						time = i["TimeStamp"].split("T")[1].split(".")[0]
+						date = kill["TimeStamp"].split("T")[0]
+						time = kill["TimeStamp"].split("T")[1].split(".")[0]
 						stats["Gdy_se_to_stalo"] = date + " " + time
-						self.already_displayed.append(i["EventId"])
+						self.kills_to_print.append(i["EventId"])
 						image = get_images(items_dict,
-						                  i["Killer"]["Name"],
-						                  i["Victim"]["Name"],
+						                  kill["Killer"]["Name"],
+						                  kill["Victim"]["Name"],
 						                  stats["Gdy_se_to_stalo"],
-						                  i["Killer"]["GuildName"],
-						                  i["Victim"]["GuildName"],
-						                  i["Killer"]["AverageItemPower"],
-						                  i["Victim"]["AverageItemPower"]
+						                  kill["Killer"]["GuildName"],
+						                  kill["Victim"]["GuildName"],
+						                  kill["Killer"]["AverageItemPower"],
+						                  kill["Victim"]["AverageItemPower"]
 						                  )
 						return image
 
-					elif i["Victim"]["Id"] in self.members and i["EventId"] not in self.already_displayed:
+					elif kill["Victim"]["GuildId"] is GUILD_ID and kill["EventId"] not in self.kills_to_print:
 						print("We have a victim")
 						stats = {}
 						killer_items = []
 						victim_items = []
-						for killer_item in i["Killer"]["Equipment"]:
+						for killer_item in kill["Killer"]["Equipment"]:
 							try:
-								killer_items.append(i["Killer"]["Equipment"][killer_item]["Type"])
+								killer_items.append(kill["Killer"]["Equipment"][killer_item]["Type"])
 							except TypeError:
 								pass
 						items_dict = {"killer": killer_items}
-						for victim_item in i["Victim"]["Equipment"]:
+						for victim_item in kill["Victim"]["Equipment"]:
 							try:
-								victim_items.append(i["Victim"]["Equipment"][victim_item]["Type"])
+								victim_items.append(kill["Victim"]["Equipment"][victim_item]["Type"])
 							except TypeError:
 								pass
 						items_dict["victim"] = victim_items
-						date = i["TimeStamp"].split("T")[0]
-						time = i["TimeStamp"].split("T")[1].split(".")[0]
+						date = kill["TimeStamp"].split("T")[0]
+						time = kill["TimeStamp"].split("T")[1].split(".")[0]
 						stats["Gdy_se_to_stalo"] = date + " " + time
-						self.already_displayed.append(i["EventId"])
+						self.kills_to_print.append(kill["EventId"])
 						image = get_images(items_dict,
-						                   i["Killer"]["Name"],
-						                   i["Victim"]["Name"],
+						                   kill["Killer"]["Name"],
+						                   kill["Victim"]["Name"],
 						                   stats["Gdy_se_to_stalo"],
-						                   i["Killer"]["GuildName"],
-						                   i["Victim"]["GuildName"],
-						                   i["Killer"]["AverageItemPower"],
-						                   i["Victim"]["AverageItemPower"]
+						                   kill["Killer"]["GuildName"],
+						                   kill["Victim"]["GuildName"],
+						                   kill["Killer"]["AverageItemPower"],
+						                   kill["Victim"]["AverageItemPower"]
 						                   )
 						return image
 
@@ -98,6 +98,6 @@ class Kills:
 
 			except JSONDecodeError:
 				return
-			if len(self.already_displayed) > 150:
+			if len(self.kills_to_print) > 150:
 				print("Purging...")
-				self.already_displayed = []
+				self.kills_to_print = []
