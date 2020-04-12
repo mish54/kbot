@@ -1,36 +1,28 @@
 import requests
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageColor
 from io import BytesIO
 
+def get_person_image(person_equipment):
+    """ Funkce pro vytvoreni obrazku pro jednoho hrace. """
 
-def get_images(items, killer, victim, time, gilda_killer, gilda_victim, ip_killer, ip_victim):
-    dest = Image.new("RGB", (640, (len(items["killer"])*64) + 200), "brown")
-    height = 0
-    for item in items["killer"]:
-        response = requests.get(f'https://gameinfo.albiononline.com/api/gameinfo/items/{item}').content
-        img1 = Image.open(BytesIO(response))
-        img1.thumbnail((64, 64))
-        dest.paste(img1, (20, height + 150))
-        height += 64
+    def item_paste(image, x, y, url):
+        """ Pomocna funkce pro stazeni obrazku z url adresy a vlozeni do obrazku. """
+        response = requests.get(url).content
+        subimage = Image.open(BytesIO(response))
+        subimage.thumbnail((64, 64))
+        image.paste(subimage, (x, y))
+        return image
 
-    height = 0
+    def get_url_image(item_name, quality):
+        """ Pomocna funkce pro ziskani ulr adresy obrazku predmetu. """
+        return f'https://gameinfo.albiononline.com/api/gameinfo/items/{item_name}.png?quality={quality}'
 
-    for item in items["victim"]:
-        response = requests.get(f'https://gameinfo.albiononline.com/api/gameinfo/items/{item}').content
-        img1 = Image.open(BytesIO(response))
-        img1.thumbnail((64, 64))
-        dest.paste(img1, (480, height + 150))
-        height += 64
-    font = ImageFont.truetype("CollegiateBlackFLF.ttf",  20)
-    img_draw = ImageDraw.Draw(dest)
-    img_draw.text((20, 10), f'Killer: {killer}', fill='white', font=font)
-    img_draw.text((380, 10), f'Victim: {victim}', fill='white', font=font)
-    img_draw.text((110, 240), f'Server time: {time}', fill='white', font=font)
-    img_draw.text((20, 50), f'Gilda: {gilda_killer}', fill='white', font=font)
-    img_draw.text((380, 50), f'Gilda: {gilda_victim}', fill='white', font=font)
-    img_draw.text((20, 90), f'IP: {ip_killer}', fill='white', font=font)
-    img_draw.text((380, 90), f'IP: {ip_victim}', fill='white', font=font)
-    arr = BytesIO()
-    dest.save(arr, format='PNG')
-    arr.seek(0)
-    return arr
+    # vytvoreni zakladu
+    dest = Image.open("./pictures/gear.png")
+    dest = item_paste( dest, 0, 0, get_url_image("T4_2H_DUALSICKLE_UNDEAD@3", 2) )
+    return dest
+
+def get_inventory_image(inventory_container):
+    pass
+
+get_person_image([]).show()

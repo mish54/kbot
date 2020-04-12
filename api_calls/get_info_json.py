@@ -53,7 +53,7 @@ class PVP_Kills:
 					else:
 						pass
 
+				last_kill_id = kills[0]["EventId"]
+
 			except JSONDecodeError:
 				return
-
-			last_kill_id = kills[0]["EventId"]
