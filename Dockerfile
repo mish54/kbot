@@ -16,8 +16,21 @@ RUN set -ex \
   && apk add --virtual buildenv libffi-dev \
   && apk add --virtual buildenv gcc \
   && apk add --virtual buildenv g++ \
-  && apk add --virtual buildenv musl-dev \
-  && apk add --virtual buildenv openldap-dev
+  && apk add --virtual buildenv musl-dev
+
+RUN apk --no-cache add jpeg-dev \
+                       zlib-dev \
+                       freetype-dev \
+                       lcms2-dev \
+                       openjpeg-dev \
+                       tiff-dev \
+                       tk-dev \
+                       tcl-dev \
+                       harfbuzz-dev \
+                       fribidi-dev
+
+
+
 
 RUN pip install --upgrade pip
 
@@ -25,14 +38,15 @@ RUN set -ex \
   && pip install requests \
   && pip install discord.py \
   && pip install python-dotenv \
-  && pip install Pillow \
+  && pip install Pillow==7.0.0
 
 RUN apk del buildenv
 
 COPY ./api_calls /opt/killbot/api_calls
 COPY ./CollegiateBlackFLF.ttf /opt/killbot
 COPY ./test.py /opt/killbot
+COPY ./.env /opt/killbot
 
 WORKDIR /opt/killbot
 
-CMD ["python3", "test.py"]
+CMD python3 ./test.py
