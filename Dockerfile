@@ -43,7 +43,7 @@ RUN set -ex \
 RUN apk del buildenv
 
 COPY ./api_calls /opt/killbot/api_calls
-COPY ./CollegiateBlackFLF.ttf /opt/killbot
+COPY misc/CollegiateBlackFLF.ttf /opt/killbot
 COPY ./test.py /opt/killbot
 COPY ./.env /opt/killbot
 

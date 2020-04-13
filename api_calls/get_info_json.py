@@ -48,25 +48,14 @@ class Kills:
 					if i["Killer"]["Id"] in self.members and i["EventId"] not in self.already_displayed:
 						print("We have a killer")
 						stats = {}
-						killer_items = []
-						victim_items = []
-						for killer_item in i["Killer"]["Equipment"]:
-							try:
-								killer_items.append(i["Killer"]["Equipment"][killer_item]["Type"])
-							except TypeError:
-								pass
-						items_dict = {"killer": killer_items}
-						for victim_item in i["Victim"]["Equipment"]:
-							try:
-								victim_items.append(i["Victim"]["Equipment"][victim_item]["Type"])
-							except TypeError:
-								pass
-						items_dict["victim"] = victim_items
+						_items = {}
+						_items["Killer"] = i["Killer"]["Equipment"]
+						_items["Victim"] =  i["Victim"]["Equipment"]
 						date = i["TimeStamp"].split("T")[0]
 						time = i["TimeStamp"].split("T")[1].split(".")[0]
 						stats["Gdy_se_to_stalo"] = date + " " + time
 						self.already_displayed.append(i["EventId"])
-						image = get_images(items_dict,
+						image = get_images(_items,
 						                  i["Killer"]["Name"],
 						                  i["Victim"]["Name"],
 						                  stats["Gdy_se_to_stalo"],
@@ -82,25 +71,11 @@ class Kills:
 					elif i["Victim"]["Id"] in self.members and i["EventId"] not in self.already_displayed:
 						print("We have a victim")
 						stats = {}
-						killer_items = []
-						victim_items = []
-						for killer_item in i["Killer"]["Equipment"]:
-							try:
-								killer_items.append(i["Killer"]["Equipment"][killer_item]["Type"])
-							except TypeError:
-								pass
-						items_dict = {"killer": killer_items}
-						for victim_item in i["Victim"]["Equipment"]:
-							try:
-								victim_items.append(i["Victim"]["Equipment"][victim_item]["Type"])
-							except TypeError:
-								pass
-						items_dict["victim"] = victim_items
 						date = i["TimeStamp"].split("T")[0]
 						time = i["TimeStamp"].split("T")[1].split(".")[0]
 						stats["Gdy_se_to_stalo"] = date + " " + time
 						self.already_displayed.append(i["EventId"])
-						image = get_images(items_dict,
+						image = get_images(_items,
 						                   i["Killer"]["Name"],
 						                   i["Victim"]["Name"],
 						                   stats["Gdy_se_to_stalo"],
