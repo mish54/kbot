@@ -28,8 +28,10 @@ async def on_message():
 	channel = client.get_channel(628899744617332737)
 
 	while not client.is_closed():
-
-		kills = await kill.main()
+		try:
+			kills = await kill.main()
+		except OSError:
+			pass
 		if kills is not None:
 			try:
 				file = discord.File(kills, filename="kills.png")

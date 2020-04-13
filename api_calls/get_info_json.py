@@ -5,12 +5,28 @@ from json import JSONDecodeError
 import json
 from api_calls.get_guild_members import Members
 from api_calls.image_builder import get_images
-
+import random
 
 class Kills:
 	def __init__(self):
 		self.members = Members().members
 		self.already_displayed = []
+		self.kill_messages = {
+			1: "Za Moc a Slavu!",
+		    2: "Za vetsi slavu gildy!",
+		    3: "Chvalte Brychtezena!",
+		    3: "Smrt nepratelum!",
+		    4: "Baf!",
+		    5: "Smrt Msicim Lidem!"
+		                      }
+		self.victim_messages = {
+			1: "Slabi nebudou diktovat!",
+			2: "Takova potupa!",
+			3: "Bez a rychle ho zabij!",
+			3: "Seno a vidle!",
+			4: "Zalez do naplaveniny!",
+			5: "Jezisi to je takova bolest,\n tak ukrutna bolest!! AAAAA!!!"
+		}
 		print(self.members[1])
 
 	@staticmethod
@@ -57,7 +73,9 @@ class Kills:
 						                  i["Killer"]["GuildName"],
 						                  i["Victim"]["GuildName"],
 						                  i["Killer"]["AverageItemPower"],
-						                  i["Victim"]["AverageItemPower"]
+						                  i["Victim"]["AverageItemPower"],
+						                  i["TotalVictimKillFame"],
+						                  self.kill_messages[random.randint(1,5)]
 						                  )
 						return image
 
@@ -89,7 +107,9 @@ class Kills:
 						                   i["Killer"]["GuildName"],
 						                   i["Victim"]["GuildName"],
 						                   i["Killer"]["AverageItemPower"],
-						                   i["Victim"]["AverageItemPower"]
+						                   i["Victim"]["AverageItemPower"],
+						                   i["TotalVictimKillFame"],
+						                   self.victim_messages[random.randint(1,5)]
 						                   )
 						return image
 
