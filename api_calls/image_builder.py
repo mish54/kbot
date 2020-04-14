@@ -5,7 +5,6 @@ from io import BytesIO
 
 def get_images(items, killer, victim, time, gilda_killer, gilda_victim, ip_killer, ip_victim, total_victim_killfame, message):
     dest = Image.open("./misc/gear.png")
-    height = 0
     for item in items["Killer"]:
         try:
             response = requests.get(
@@ -14,14 +13,16 @@ def get_images(items, killer, victim, time, gilda_killer, gilda_victim, ip_kille
             img1 = Image.open(BytesIO(response))
             img1.thumbnail((64, 64))
         except TypeError:
-            pass
+            img1 = "Blank"
 
-        if item == "Armor":
-            dest.paste(img1, (153, 85 + 141))
+        if img1 == "Blank":
+            pass
+        elif item == "Armor":
+            dest.paste(img1, (153, 226))
         elif item == "MainHand":
-            dest.paste(img1, (63, 100 + 141))
+            dest.paste(img1, (63, 241))
         elif item == "OffHand":
-            dest.paste(img1, (243, 100 + 141))
+            dest.paste(img1, (243, 241))
         elif item == "Head":
             dest.paste(img1, (153, 5 + 141))
         elif item == "Shoes":
@@ -40,14 +41,16 @@ def get_images(items, killer, victim, time, gilda_killer, gilda_victim, ip_kille
     for item in items["Victim"]:
         try:
             response = requests.get(
-                f'https://gameinfo.albiononline.com/api/gameinfo/items/{items["Killer"][item]["Type"]}'
+                f'https://gameinfo.albiononline.com/api/gameinfo/items/{items["Victim"][item]["Type"]}'
             ).content
             img1 = Image.open(BytesIO(response))
             img1.thumbnail((64, 64))
         except TypeError:
-            pass
+            img1 = "Blank"
 
-        if item == "Armor":
+        if img1 == "Blank":
+            pass
+        elif item == "Armor":
             dest.paste(img1, (150 + 678, 85 + 141))
         elif item == "MainHand":
             dest.paste(img1, (60 + 678, 100 + 141))
