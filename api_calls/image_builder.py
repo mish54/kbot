@@ -53,7 +53,7 @@ def get_image(kill, event_type):
 
     date = kill["TimeStamp"].split("T")[0]
     time = kill["TimeStamp"].split("T")[1].split(".")[0]
-    full_time = date + " " + time
+    full_time = str(date) + " " + time
     img_draw.text((300, 10), f'Cas (server): {full_time}', fill='white', font=font)
 
     img_draw.text((300, 50), f'Fame za zabiti: {kill["TotalVictimKillFame"]}', fill='white', font=font)

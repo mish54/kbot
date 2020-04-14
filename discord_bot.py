@@ -4,11 +4,12 @@ from datetime import datetime
 import discord
 from dotenv import load_dotenv
 import asyncio
-from api_calls.get_info_json import Kills
+from api_calls.get_info_json import PVP_Kills
 
-kill = Kills()
+kill = PVP_Kills()
 
 # nastaveni enviromentu
+load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 GUILD2 = os.getenv('DISCORD_GUILD2')
@@ -40,7 +41,7 @@ async def on_message():
 			except discord.errors.HTTPException:
 				print("Nothing to report")
 		else:
-			print(datetime.now() + ": No kill found.\n")
+			print(str(datetime.now()) + ": No kill found.\n")
 		await asyncio.sleep(1)
 
 
