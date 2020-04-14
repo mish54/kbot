@@ -3,13 +3,11 @@ from aiohttp.client_exceptions import ClientConnectionError
 import io
 from json import JSONDecodeError
 import json
-from api_calls.get_guild_members import Members
 from api_calls.image_builder import get_images
 import random
 
 class Kills:
 	def __init__(self):
-		self.members = Members().members
 		self.already_displayed = []
 		self.kill_messages = {
 			1: "Za Moc a Slavu!",
@@ -27,6 +25,7 @@ class Kills:
 			4: "Zalez do naplaveniny!",
 			5: "Jezisi to je takova bolest,\n tak ukrutna bolest!! AAAAA!!!"
 		}
+		self.guild_id = "uatVVzFyQjqf_H_Bfl8i2A"
 		print(self.members[1])
 
 	@staticmethod
@@ -45,7 +44,7 @@ class Kills:
 			try:
 				json_out = json.loads(html)
 				for i in json_out:
-					if i["Killer"]["Id"] in self.members and i["EventId"] not in self.already_displayed:
+					if i["Killer"]["GuildId"] in self.guild_id and i["EventId"] not in self.already_displayed:
 						print("We have a killer")
 						stats = {}
 						_items = {}
@@ -68,7 +67,7 @@ class Kills:
 						                  )
 						return image
 
-					elif i["Victim"]["Id"] in self.members and i["EventId"] not in self.already_displayed:
+					elif i["Victim"]["GuildId"] in self.guild_id and i["EventId"] not in self.already_displayed:
 						print("We have a victim")
 						stats = {}
 						_items = {}
