@@ -71,6 +71,9 @@ class Kills:
 					elif i["Victim"]["Id"] in self.members and i["EventId"] not in self.already_displayed:
 						print("We have a victim")
 						stats = {}
+						_items = {}
+						_items["Killer"] = i["Killer"]["Equipment"]
+						_items["Victim"] = i["Victim"]["Equipment"]
 						date = i["TimeStamp"].split("T")[0]
 						time = i["TimeStamp"].split("T")[1].split(".")[0]
 						stats["Gdy_se_to_stalo"] = date + " " + time

@@ -1,6 +1,6 @@
 #!/usr/bin/env
 import os
-
+from datetime import datetime
 import discord
 from dotenv import load_dotenv
 import asyncio
@@ -39,7 +39,7 @@ async def on_message():
 			except discord.errors.HTTPException:
 				print("Nothing to report")
 		else:
-			print("got none")
+			print(datetime.now())
 		await asyncio.sleep(1)
 
 
