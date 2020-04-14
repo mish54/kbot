@@ -12,9 +12,10 @@ def get_images(items, killer, victim, time, gilda_killer, gilda_victim, ip_kille
             ).content
             img1 = Image.open(BytesIO(response))
             img1.thumbnail((64, 64))
+        # TODO: This is a wrong approach (using try except catch for this), devise a way how to do it better
         except TypeError:
             img1 = "Blank"
-
+        # TODO: This whole thing is a duplicity, move to separate function
         if img1 == "Blank":
             pass
         elif item == "Armor":

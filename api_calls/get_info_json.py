@@ -26,7 +26,6 @@ class Kills:
 			5: "Jezisi to je takova bolest,\n tak ukrutna bolest!! AAAAA!!!"
 		}
 		self.guild_id = "uatVVzFyQjqf_H_Bfl8i2A"
-		print(self.members[1])
 
 	@staticmethod
 	async def fetch(session, url):
@@ -44,7 +43,8 @@ class Kills:
 			try:
 				json_out = json.loads(html)
 				for i in json_out:
-					if i["Killer"]["GuildId"] in self.guild_id and i["EventId"] not in self.already_displayed:
+					if i["Killer"]["GuildId"] == self.guild_id and i["EventId"] not in self.already_displayed:
+						# TODO: this all is a duplicit code, move to function or find other way to remove it
 						print("We have a killer")
 						stats = {}
 						_items = {}
@@ -67,7 +67,7 @@ class Kills:
 						                  )
 						return image
 
-					elif i["Victim"]["GuildId"] in self.guild_id and i["EventId"] not in self.already_displayed:
+					elif i["Victim"]["GuildId"] == self.guild_id and i["EventId"] not in self.already_displayed:
 						print("We have a victim")
 						stats = {}
 						_items = {}

@@ -44,7 +44,7 @@ RUN apk del buildenv
 
 COPY ./api_calls /opt/killbot/api_calls
 COPY misc/CollegiateBlackFLF.ttf /opt/killbot
-COPY ./test.py /opt/killbot
+COPY discord_bot.py /opt/killbot
 COPY ./.env /opt/killbot
 
 WORKDIR /opt/killbot
