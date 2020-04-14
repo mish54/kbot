@@ -5,11 +5,11 @@ from json import JSONDecodeError
 import json
 
 import api_calls.variables
-from api_calls.kill import Kill
+from api_calls.image_builder import get_image
 
 class PVP_Kills:
 	def __init__(self):
-		self.kills_to_print = []
+		self.already_displayed = []
 		self.last_kill_id = -1
 
 	@staticmethod
@@ -34,26 +34,34 @@ class PVP_Kills:
 				for kill in json_out:
 
 					# zabiti hracu guildy navzajem (napr. hellgate)
-					if kill["Killer"]["GuildId"] is GUILD_ID and kill["Victim"]["GuildId"] is GUILD_ID
-						and kill["EventId"] not in self.kills_to_print:
+					if kill["Killer"]["GuildId"] is GUILD_IDs and kill["Victim"]["GuildId"] is GUILD_ID \
+						and kill["EventId"] not in self.already_displayed:
 						print("We have an incident!")
-						self.kills.append(Kill(kill,2))
+						self.already_displayed.append(i["EventId"])
+						image = get_image(kill, 2)
+						return image
 
 					# clen guildy uspesne nekoho zabil
-					else if kill["Killer"]["GuildId"] is GUILD_ID and kill["EventId"] not in self.kills_to_print:
+					elif kill["Killer"]["GuildId"] is GUILD_IDs and kill["EventId"] not in self.already_displayed:
 						print("We have a killer")
-						self.kills.append(Kill(kill,0))
+						self.already_displayed.append(i["EventId"])
+						image = get_image(kill, 0)
+						return image
 
-					# clen guildy padnul v boji
-					elif kill["Victim"]["GuildId"] is GUILD_ID and kill["EventId"] not in self.kills_to_print:
+						# clen guildy padnul v boji
+					elif kill["Victim"]["GuildId"] is GUILD_IDs and kill["EventId"] not in self.already_displayed:
 						print("We have a victim")
-						self.kills.append(Kill(kill,1))
+						self.already_displayed.append(i["EventId"])
+						image = get_image(kill, 1)
+						return image
 
 					# cizi guilda
 					else:
 						pass
 
-				last_kill_id = kills[0]["EventId"]
-
 			except JSONDecodeError:
 				return
+
+			if len(self.already_displayed) > 150:
+				print("Purging...")
+				self.already_displayed = list(self.already_displayed[-10:])

@@ -1,17 +1,18 @@
 #!/usr/bin/env
 import os
-
+from datetime import datetime
 import discord
 from dotenv import load_dotenv
 import asyncio
 from api_calls.get_info_json import Kills
 
-load_dotenv()
-
 kill = Kills()
 
-TOKEN = os.getenv("DISCORD_TOKEN")
-GUILD = os.getenv("DISCORD_GUILD")
+# nastaveni enviromentu
+TOKEN = os.getenv('DISCORD_TOKEN')
+GUILD = os.getenv('DISCORD_GUILD')
+GUILD2 = os.getenv('DISCORD_GUILD2')
+
 client = discord.Client()
 
 
@@ -27,18 +28,19 @@ async def on_message():
 	await client.wait_until_ready()
 	channel = client.get_channel(628899744617332737)
 
-	pvp_kills = PVP_Kills() # pocatecni inicializace kills
 	while not client.is_closed():
-		await pvp_kills.main()
-		if len(pvp_kills.kills_to_print) == 0:
+		try:
+			kills = await kill.main()
+		except OSError:
+			pass
+		if kills is not None:
 			try:
-				# TODO upravit obrazky
-				file = discord.File(pvp_kills.kills_to_print, filename="kills.png")
+				file = discord.File(kills, filename="kills.png")
 				await channel.send("Kill.png", file=file)
 			except discord.errors.HTTPException:
 				print("Nothing to report")
 		else:
-			print("No new PvP kill for selected guild.")
+			print(datetime.now() + ": No kill found.\n")
 		await asyncio.sleep(1)
 
 
