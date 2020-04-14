@@ -24,19 +24,19 @@ def get_images(items, killer, victim, time, gilda_killer, gilda_victim, ip_kille
         elif item == "OffHand":
             dest.paste(img1, (243, 241))
         elif item == "Head":
-            dest.paste(img1, (153, 5 + 141))
+            dest.paste(img1, (153, 146))
         elif item == "Shoes":
-            dest.paste(img1, (153, 165 + 141))
+            dest.paste(img1, (153, 306))
         elif item == "Bag":
-            dest.paste(img1, (53, 10 + 141))
+            dest.paste(img1, (53, 151))
         elif item == "Cape":
-            dest.paste(img1, (253, 10 + 141))
+            dest.paste(img1, (253, 151))
         elif item == "Mount":
-            dest.paste(img1, (153, 245 + 141))
+            dest.paste(img1, (153, 386))
         elif item == "Potion":
-            dest.paste(img1, (253, 180 + 141))
+            dest.paste(img1, (253, 321))
         elif item == "Food":
-            dest.paste(img1, (53, 180 + 141))
+            dest.paste(img1, (53, 321))
 
     for item in items["Victim"]:
         try:
@@ -51,25 +51,25 @@ def get_images(items, killer, victim, time, gilda_killer, gilda_victim, ip_kille
         if img1 == "Blank":
             pass
         elif item == "Armor":
-            dest.paste(img1, (150 + 678, 85 + 141))
+            dest.paste(img1, (828, 226))
         elif item == "MainHand":
-            dest.paste(img1, (60 + 678, 100 + 141))
+            dest.paste(img1, (738, 241))
         elif item == "OffHand":
-            dest.paste(img1, (240 + 678, 100 + 141))
+            dest.paste(img1, (918, 241))
         elif item == "Head":
-            dest.paste(img1, (150 + 678, 5 + 141))
+            dest.paste(img1, (828, 146))
         elif item == "Shoes":
-            dest.paste(img1, (150 + 678, 165 + 141))
+            dest.paste(img1, (828, 306))
         elif item == "Bag":
-            dest.paste(img1, (50 + 678, 10 + 141))
+            dest.paste(img1, (728, 151))
         elif item == "Cape":
-            dest.paste(img1, (250 + 678, 10 + 141))
+            dest.paste(img1, (928, 151))
         elif item == "Mount":
-            dest.paste(img1, (150 + 678, 245 + 141))
+            dest.paste(img1, (828, 386))
         elif item == "Potion":
-            dest.paste(img1, (250 + 678, 180 + 141))
+            dest.paste(img1, (928, 321))
         elif item == "Food":
-            dest.paste(img1, (50 + 678, 180 + 141))
+            dest.paste(img1, (728, 321))
     font = ImageFont.truetype("./misc/CollegiateBlackFLF.ttf",  20)
     img_draw = ImageDraw.Draw(dest)
     img_draw.text((10, 10), f'Vrah: {killer}', fill='white', font=font)
