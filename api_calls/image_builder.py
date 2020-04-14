@@ -3,7 +3,17 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 
 
-def get_images(items, killer, victim, time, gilda_killer, gilda_victim, ip_killer, ip_victim, total_victim_killfame, message):
+def get_images(items,
+               killer,
+               victim,
+               time,
+               gilda_killer,
+               gilda_victim,
+               ip_killer,
+               ip_victim,
+               total_victim_killfame,
+               message,
+               participants):
     dest = Image.open("./misc/gear.png")
     for item in items["Killer"]:
         try:
@@ -71,17 +81,29 @@ def get_images(items, killer, victim, time, gilda_killer, gilda_victim, ip_kille
             dest.paste(img1, (928, 321))
         elif item == "Food":
             dest.paste(img1, (728, 321))
+
+
     font = ImageFont.truetype("./misc/CollegiateBlackFLF.ttf",  20)
     img_draw = ImageDraw.Draw(dest)
     img_draw.text((10, 10), f'Vrah: {killer}', fill='white', font=font)
     img_draw.text((778, 10), f'Obet: {victim}', fill='white', font=font)
-    img_draw.text((300, 10), f'Cas (server): {time}', fill='white', font=font)
-    img_draw.text((300, 50), f'Fame za zabiti: {total_victim_killfame}', fill='white', font=font)
-    img_draw.text((300, 90), f'{message}', fill='white', font=font)
+    img_draw.text((400, 10), f'Cas: {time}', fill='white', font=font)
+    img_draw.text((400, 130), f'Fame za zabiti: {total_victim_killfame}', fill='white', font=font)
+    img_draw.text((400, 50), f'{message}', fill='white', font=font)
     img_draw.text((10, 50), f'Gilda: {gilda_killer}', fill='white', font=font)
     img_draw.text((778, 50), f'Gilda: {gilda_victim}', fill='white', font=font)
     img_draw.text((10, 90), f'IP: {ip_killer}', fill='white', font=font)
     img_draw.text((778, 90), f'IP: {ip_victim}', fill='white', font=font)
+    font = ImageFont.truetype("./misc/CollegiateBlackFLF.ttf", 10)
+    img_draw.text((365, 170), f'Ucinkovali:', fill='white', font=font)
+    spacer = 0
+    for participant in participants:
+        if participant["Name"] != killer:
+            img_draw.text((365, 200 + spacer),
+                          f'{participant["Name"]}  |  IP:{round(participant["AverageItemPower"], 1)}  |  '
+                          f'DMG:{round(participant["DamageDone"]), 1}', fill='white', font=font)
+            spacer += 30
+
     arr = BytesIO()
     dest.save(arr, format='PNG')
     arr.seek(0)

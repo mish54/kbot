@@ -23,7 +23,7 @@ class Kills:
 			3: "Bez a rychle ho zabij!",
 			3: "Seno a vidle!",
 			4: "Zalez do naplaveniny!",
-			5: "Jezisi to je takova bolest,\n tak ukrutna bolest!! AAAAA!!!"
+			5: "Jezisi to je takova bolest,\n tak ukrutna bolest!!\n AAAAA!!!"
 		}
 		self.guild_id = "uatVVzFyQjqf_H_Bfl8i2A"
 
@@ -63,7 +63,8 @@ class Kills:
 						                  i["Killer"]["AverageItemPower"],
 						                  i["Victim"]["AverageItemPower"],
 						                  i["TotalVictimKillFame"],
-						                  self.kill_messages[random.randint(1,5)]
+						                  self.kill_messages[random.randint(1,5)],
+						                  i["Participants"]
 						                  )
 						return image
 
@@ -86,7 +87,8 @@ class Kills:
 						                   i["Killer"]["AverageItemPower"],
 						                   i["Victim"]["AverageItemPower"],
 						                   i["TotalVictimKillFame"],
-						                   self.victim_messages[random.randint(1,5)]
+						                   self.victim_messages[random.randint(1,5)],
+						                   i["Participants"]
 						                   )
 						return image
 
