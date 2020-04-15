@@ -50,4 +50,4 @@ COPY ./misc/gear.png /opt/killbot/misc
 
 WORKDIR /opt/killbot
 
-CMD python3 ./test.py
+CMD python3 ./discord_bot.py
