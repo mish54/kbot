@@ -1,5 +1,6 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+api_calls/__pycache__/
 *.py[cod]
 *$py.class
 
@@ -116,7 +117,7 @@ venv.bak/
 
 # Rope project settings
 .ropeproject
-
+.idea/
 # mkdocs documentation
 /site
 

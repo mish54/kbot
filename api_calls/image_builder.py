@@ -1,9 +1,9 @@
 import requests
 from PIL import Image, ImageDraw, ImageFont, ImageColor
 from io import BytesIO
-import os
 
-def get_image(kill, event_type):
+
+def get_image(kill, event_type, message):
     """ Funkce pro vytvoreni obrazku jednoho killu. """
 
     def person_subimage(dest_img, person_list, offset_x, offset_y):
@@ -49,21 +49,36 @@ def get_image(kill, event_type):
 
     font = ImageFont.truetype("./misc/CollegiateBlackFLF.ttf",  20)
     img_draw = ImageDraw.Draw(dest)
-    img_draw.text((10, 10), f'Vrah: {kill["Killer"]["Name"]}', fill='white', font=font)
-    img_draw.text((778, 10), f'Obet: {kill["Victim"]["Name"]}', fill='white', font=font)
+    img_draw.text((10, 10), f'Vrah: {kill["Killer"]["Name"]}', fill='black', font=font)
+    img_draw.text((778, 10), f'Obet: {kill["Victim"]["Name"]}', fill='black', font=font)
 
     date = kill["TimeStamp"].split("T")[0]
     time = kill["TimeStamp"].split("T")[1].split(".")[0]
     full_time = str(date) + " " + time
-    img_draw.text((300, 10), f'Cas (server): {full_time}', fill='white', font=font)
+    img_draw.text((300, 10), f'Cas (server): {full_time}', fill='black', font=font)
 
-    img_draw.text((300, 50), f'Fame za zabiti: {kill["TotalVictimKillFame"]}', fill='white', font=font)
-    img_draw.text((10, 50), f'Gilda: {kill["Killer"]["GuildName"]}', fill='white', font=font)
-    img_draw.text((778, 50), f'Gilda: {kill["Victim"]["GuildName"]}', fill='white', font=font)
-    img_draw.text((10, 90), f'IP: {int(kill["Killer"]["AverageItemPower"])}', fill='white', font=font)
-    img_draw.text((778, 90), f'IP: {int(kill["Victim"]["AverageItemPower"])}', fill='white', font=font)
+    img_draw.text((300, 50), f'Fame za zabiti: {kill["TotalVictimKillFame"]}', fill='black', font=font)
+    img_draw.text((10, 50), f'Gilda: {kill["Killer"]["GuildName"]}', fill='black', font=font)
+    img_draw.text((778, 50), f'Gilda: {kill["Victim"]["GuildName"]}', fill='black', font=font)
+    img_draw.text((10, 90), f'IP: {int(kill["Killer"]["AverageItemPower"])}', fill='black', font=font)
+    img_draw.text((778, 90), f'IP: {int(kill["Victim"]["AverageItemPower"])}', fill='black', font=font)
+
+    font = ImageFont.truetype("./misc/CollegiateBlackFLF.ttf", 10)
+    img_draw.text((365, 170), f'Ucinkovali:', fill='white', font=font)
+    spacer = 0
+    for participant in kill["Participants"]:
+        if participant["DamageDone"] > 0:
+            img_draw.text((365, 200 + spacer),
+                          f'{participant["Name"]}  |  IP:{int(participant["AverageItemPower"], 1)}  |  '
+                          f'DMG:{int(participant["DamageDone"]), 1}', fill='red', font=font)
+            spacer += 30
+        if participant["SupportHealingDone"] > 0:
+            img_draw.text((365, 200 + spacer),
+                          f'{participant["Name"]}  |  IP:{int(participant["AverageItemPower"], 1)}  |  '
+                          f'DMG:{int(participant["SupportHealingDone"]), 1}', fill='green', font=font)
+            spacer += 30
+
     arr = BytesIO()
     dest.save(arr, format='PNG')
     arr.seek(0)
-    print("Image built.")
     return arr

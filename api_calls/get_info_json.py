@@ -3,14 +3,30 @@ from aiohttp.client_exceptions import ClientConnectionError
 import io
 from json import JSONDecodeError
 import json
-import os
 from api_calls.image_builder import get_image
+import random
+import os
 
-class PVP_Kills:
+class Kills:
 	def __init__(self):
 		self.already_displayed = []
-		self.last_kill_id = -1
-		self.GUILD_IDs = ["uatVVzFyQjqf_H_Bfl8i2A","cknpiEOaSOC-_Qvj73C5zg"]
+		self.kill_messages = {
+			1: "Za Moc a Slavu!",
+		    2: "Za vetsi slavu gildy!",
+		    3: "Chvalte Brychtezena!",
+		    3: "Smrt nepratelum!",
+		    4: "Baf!",
+		    5: "Smrt Msicim Lidem!"
+		                      }
+		self.victim_messages = {
+			1: "Slabi nebudou diktovat!",
+			2: "Takova potupa!",
+			3: "Bez a rychle ho zabij!",
+			3: "Seno a vidle!",
+			4: "Zalez do naplaveniny!",
+			5: "Jezisi to je takova bolest,\n tak ukrutna bolest!!\n AAAAA!!!"
+		}
+		self.GUILD_ID = os.getenv('GUILD_ID')
 
 	@staticmethod
 	async def fetch(session, url):
@@ -21,7 +37,7 @@ class PVP_Kills:
 		async with aiohttp.ClientSession() as session:
 			try:
 				# stazeni obsahu stranky
-				html = await PVP_Kills.fetch(session,
+				html = await Kills.fetch(session,
 				                         'https://gameinfo.albiononline.com/api/gameinfo/events?limit=51&offset=0')
 			except:
 				print("Client exception error, continuing...")
@@ -29,7 +45,6 @@ class PVP_Kills:
 
 			try:
 				# dekodovani stranky JSONu na contejnery pythonu
-				print("JSON decode")
 				json_out = json.loads(html)
 
 				for kill in json_out:
@@ -39,21 +54,21 @@ class PVP_Kills:
 						and kill["EventId"] not in self.already_displayed:
 						print("We have an incident!")
 						self.already_displayed.append(kill["EventId"])
-						image = get_image(kill, 2)
+						image = get_image(kill, 2, self.kill_messages[random.randint(1,5)])
 						return image
 
 					# clen guildy uspesne nekoho zabil
 					elif kill["Killer"]["GuildId"] in self.GUILD_IDs and kill["EventId"] not in self.already_displayed:
 						print("We have a killer")
 						self.already_displayed.append(kill["EventId"])
-						image = get_image(kill, 0)
+						image = get_image(kill, 0, self.kill_messages[random.randint(1,5)])
 						return image
 
-						# clen guildy padnul v boji
+					# clen guildy padnul v boji
 					elif kill["Victim"]["GuildId"] in self.GUILD_IDs and kill["EventId"] not in self.already_displayed:
 						print("We have a victim")
 						self.already_displayed.append(kill["EventId"])
-						image = get_image(kill, 1)
+						image = get_image(kill, 1, self.victim_messages[random.randint(1,5)])
 						return image
 
 					# cizi guilda
