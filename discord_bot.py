@@ -11,8 +11,8 @@ load_dotenv()
 
 kill = Kills()
 
-TOKEN = os.getenv('DISCORD_TOKEN')
-GUILD = os.getenv('DISCORD_GUILD')
+TOKEN = os.getenv("DISCORD_TOKEN")
+GUILD = os.getenv("DISCORD_GUILD")
 client = discord.Client()
 
 
@@ -23,7 +23,7 @@ async def on_ready():
 
 
 @client.event
-async def on_message(message=""):
+async def on_message():
 	await client.wait_until_ready()
 	channel = client.get_channel(628899744617332737)
 

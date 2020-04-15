@@ -3,9 +3,8 @@ from aiohttp.client_exceptions import ClientConnectionError
 import io
 from json import JSONDecodeError
 import json
-from api_calls.image_builder import get_image
+from api_calls.image_builder import get_images
 import random
-import os
 
 class Kills:
 	def __init__(self):
@@ -27,8 +26,6 @@ class Kills:
 			5: "Jezisi to je takova bolest,\n tak ukrutna bolest!!\n AAAAA!!!"
 		}
 		self.guild_id = "uatVVzFyQjqf_H_Bfl8i2A"
-		print(self.guild_id)
-
 
 	@staticmethod
 	async def fetch(session, url):
