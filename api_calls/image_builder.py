@@ -60,23 +60,25 @@ def get_image(kill, event_type, message):
     img_draw.text((300, 50), f'Fame za zabiti: {kill["TotalVictimKillFame"]}', fill='black', font=font)
     img_draw.text((10, 50), f'Gilda: {kill["Killer"]["GuildName"]}', fill='black', font=font)
     img_draw.text((778, 50), f'Gilda: {kill["Victim"]["GuildName"]}', fill='black', font=font)
-    img_draw.text((10, 90), f'IP: {int(kill["Killer"]["AverageItemPower"])}', fill='black', font=font)
-    img_draw.text((778, 90), f'IP: {int(kill["Victim"]["AverageItemPower"])}', fill='black', font=font)
+    img_draw.text((10, 90), f'IP: {round(kill["Killer"]["AverageItemPower"])}', fill='black', font=font)
+    img_draw.text((778, 90), f'IP: {round(kill["Victim"]["AverageItemPower"])}', fill='black', font=font)
 
     font = ImageFont.truetype("./misc/CollegiateBlackFLF.ttf", 10)
-    img_draw.text((365, 170), f'Ucinkovali:', fill='white', font=font)
+    img_draw.text((365, 170), f'Ucinkovali:', fill='black', font=font)
     spacer = 0
     for participant in kill["Participants"]:
         if participant["DamageDone"] > 0:
             img_draw.text((365, 200 + spacer),
-                          f'{participant["Name"]}  |  IP:{int(participant["AverageItemPower"], 1)}  |  '
-                          f'DMG:{int(participant["DamageDone"]), 1}', fill='red', font=font)
+                          f'{participant["Name"]}  |  IP:{round(participant["AverageItemPower"])}  |  '
+                          f'DMG:{round(participant["DamageDone"])}', fill='red', font=font)
             spacer += 30
         if participant["SupportHealingDone"] > 0:
             img_draw.text((365, 200 + spacer),
-                          f'{participant["Name"]}  |  IP:{int(participant["AverageItemPower"], 1)}  |  '
-                          f'DMG:{int(participant["SupportHealingDone"]), 1}', fill='green', font=font)
+                          f'{participant["Name"]}  |  IP:{round(participant["AverageItemPower"])}  |  '
+                          f'HEAL:{round(participant["SupportHealingDone"])}', fill='green', font=font)
             spacer += 30
+
+    img_draw.text((365, 200 + spacer), f'Pocet prihlizejicich: {len(kill["GroupMembers"])}', fill='black', font=font)
 
     arr = BytesIO()
     dest.save(arr, format='PNG')

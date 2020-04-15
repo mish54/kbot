@@ -26,7 +26,9 @@ class Kills:
 			4: "Zalez do naplaveniny!",
 			5: "Jezisi to je takova bolest,\n tak ukrutna bolest!!\n AAAAA!!!"
 		}
-		self.GUILD_ID = os.getenv('GUILD_ID')
+		self.guild_id = "uatVVzFyQjqf_H_Bfl8i2A"
+		print(self.guild_id)
+
 
 	@staticmethod
 	async def fetch(session, url):
@@ -36,21 +38,18 @@ class Kills:
 	async def main(self):
 		async with aiohttp.ClientSession() as session:
 			try:
-				# stazeni obsahu stranky
 				html = await Kills.fetch(session,
 				                         'https://gameinfo.albiononline.com/api/gameinfo/events?limit=51&offset=0')
 			except:
 				print("Client exception error, continuing...")
 				pass
-
 			try:
-				# dekodovani stranky JSONu na contejnery pythonu
 				json_out = json.loads(html)
 
 				for kill in json_out:
 
 					# zabiti hracu guildy navzajem (napr. hellgate)
-					if kill["Killer"]["GuildId"] in self.GUILD_IDs and kill["Victim"]["GuildId"] in self.GUILD_IDs \
+					if kill["Killer"]["GuildId"] == self.guild_id and kill["Victim"]["GuildId"] == self.guild_id \
 						and kill["EventId"] not in self.already_displayed:
 						print("We have an incident!")
 						self.already_displayed.append(kill["EventId"])
@@ -58,14 +57,14 @@ class Kills:
 						return image
 
 					# clen guildy uspesne nekoho zabil
-					elif kill["Killer"]["GuildId"] in self.GUILD_IDs and kill["EventId"] not in self.already_displayed:
+					elif kill["Killer"]["GuildId"] == self.guild_id and kill["EventId"] not in self.already_displayed:
 						print("We have a killer")
 						self.already_displayed.append(kill["EventId"])
 						image = get_image(kill, 0, self.kill_messages[random.randint(1,5)])
 						return image
 
 					# clen guildy padnul v boji
-					elif kill["Victim"]["GuildId"] in self.GUILD_IDs and kill["EventId"] not in self.already_displayed:
+					elif kill["Victim"]["GuildId"] == self.guild_id and kill["EventId"] not in self.already_displayed:
 						print("We have a victim")
 						self.already_displayed.append(kill["EventId"])
 						image = get_image(kill, 1, self.victim_messages[random.randint(1,5)])
