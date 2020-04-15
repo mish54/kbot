@@ -12,7 +12,7 @@ kill = PVP_Kills()
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
-GUILD2 = os.getenv('DISCORD_GUILD2')
+#GUILD2 = os.getenv('DISCORD_GUILD2')
 
 client = discord.Client()
 
@@ -25,15 +25,12 @@ async def on_ready():
 
 
 @client.event
-async def on_message():
+async def on_message(message=""):
 	await client.wait_until_ready()
-	channel = client.get_channel(628899744617332737)
+	channel = client.get_channel(697367087844294697)
 
 	while not client.is_closed():
-		try:
-			kills = await kill.main()
-		except OSError:
-			pass
+		kills = await kill.main()
 		if kills is not None:
 			try:
 				file = discord.File(kills, filename="kills.png")
@@ -41,8 +38,8 @@ async def on_message():
 			except discord.errors.HTTPException:
 				print("Nothing to report")
 		else:
-			print(str(datetime.now()) + ": No kill found.\n")
-		await asyncio.sleep(1)
+			print(str(datetime.now()) + ": No kill found.")
+		await asyncio.sleep(5)
 
 
 client.run(TOKEN)

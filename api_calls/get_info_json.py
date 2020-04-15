@@ -3,7 +3,7 @@ from aiohttp.client_exceptions import ClientConnectionError
 import io
 from json import JSONDecodeError
 import json
-
+import os
 from api_calls.image_builder import get_image
 
 class PVP_Kills:
@@ -29,6 +29,7 @@ class PVP_Kills:
 
 			try:
 				# dekodovani stranky JSONu na contejnery pythonu
+				print("JSON decode")
 				json_out = json.loads(html)
 
 				for kill in json_out:
@@ -37,21 +38,21 @@ class PVP_Kills:
 					if kill["Killer"]["GuildId"] in self.GUILD_IDs and kill["Victim"]["GuildId"] in self.GUILD_IDs \
 						and kill["EventId"] not in self.already_displayed:
 						print("We have an incident!")
-						self.already_displayed.append(i["EventId"])
+						self.already_displayed.append(kill["EventId"])
 						image = get_image(kill, 2)
 						return image
 
 					# clen guildy uspesne nekoho zabil
-					elif kill["Killer"]["GuildId"] is self.GUILD_IDs and kill["EventId"] not in self.already_displayed:
+					elif kill["Killer"]["GuildId"] in self.GUILD_IDs and kill["EventId"] not in self.already_displayed:
 						print("We have a killer")
-						self.already_displayed.append(i["EventId"])
+						self.already_displayed.append(kill["EventId"])
 						image = get_image(kill, 0)
 						return image
 
 						# clen guildy padnul v boji
-					elif kill["Victim"]["GuildId"] is self.GUILD_IDs and kill["EventId"] not in self.already_displayed:
+					elif kill["Victim"]["GuildId"] in self.GUILD_IDs and kill["EventId"] not in self.already_displayed:
 						print("We have a victim")
-						self.already_displayed.append(i["EventId"])
+						self.already_displayed.append(kill["EventId"])
 						image = get_image(kill, 1)
 						return image
 

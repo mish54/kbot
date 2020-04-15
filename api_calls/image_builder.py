@@ -1,16 +1,17 @@
 import requests
 from PIL import Image, ImageDraw, ImageFont, ImageColor
 from io import BytesIO
+import os
 
 def get_image(kill, event_type):
     """ Funkce pro vytvoreni obrazku jednoho killu. """
 
-    def person_subimage(dest_img, person_list, person_type, offset_x, offset_y):
+    def person_subimage(dest_img, person_list, offset_x, offset_y):
         """ Funkce pro vytvoreni zmenu obrazku pro jednu osobu. """
         for item in person_list["Equipment"]:
             try:
                 response = requests.get(
-                    f'https://gameinfo.albiononline.com/api/gameinfo/items/{items[person_type][item]["Type"]}?quality={items[person_type][item]["Quality"]}'
+                    f'https://gameinfo.albiononline.com/api/gameinfo/items/{person_list["Equipment"][item]["Type"]}?quality={person_list["Equipment"][item]["Quality"]}'
                 ).content
                 img1 = Image.open(BytesIO(response))
                 img1.thumbnail((64, 64))
@@ -43,8 +44,8 @@ def get_image(kill, event_type):
         return dest_img
 
     dest = Image.open("./misc/gear.png")
-    dest = person_subimage(dest, kill["Killer"], "Killer", 0, 146)
-    dest = person_subimage(dest, kill["Victim"], "Victim", 675, 146)
+    dest = person_subimage(dest, kill["Killer"], 0, 146)
+    dest = person_subimage(dest, kill["Victim"], 675, 146)
 
     font = ImageFont.truetype("./misc/CollegiateBlackFLF.ttf",  20)
     img_draw = ImageDraw.Draw(dest)
@@ -64,4 +65,5 @@ def get_image(kill, event_type):
     arr = BytesIO()
     dest.save(arr, format='PNG')
     arr.seek(0)
+    print("Image built.")
     return arr
