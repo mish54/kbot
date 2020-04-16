@@ -8,11 +8,12 @@ from api_calls.get_info_json import Kills
 
 load_dotenv()
 
-kill = Kills()
-
 TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD = os.getenv("DISCORD_GUILD")
+GUILD_ID = os.getenv("GUILD_ID")
 client = discord.Client()
+
+kill = Kills(GUILD_ID)
 
 
 @client.event

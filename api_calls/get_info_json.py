@@ -3,10 +3,11 @@ from json import JSONDecodeError
 import json
 from api_calls.image_builder import get_images
 import random
+from aiohttp.client_exceptions import ClientPayloadError
 
 
 class Kills:
-	def __init__(self):
+	def __init__(self, guild_id):
 		self.already_displayed = []
 		self.kill_messages = {
 			1: "Za Moc a Slavu!",
@@ -24,7 +25,7 @@ class Kills:
 			4: "Zalez do naplaveniny!",
 			5: "Jezisi to je takova bolest,\n tak ukrutna bolest!!\n AAAAA!!!"
 		}
-		self.guild_id = "uatVVzFyQjqf_H_Bfl8i2A"
+		self.guild_id = guild_id
 
 	@staticmethod
 	async def fetch(session, url):
@@ -34,7 +35,11 @@ class Kills:
 			except AssertionError:
 				print(f"Response recieved: {response.status}")
 
-			return await response.read()
+			try:
+				payload = await response.read()
+			except ClientPayloadError:
+				print("Got payload exception")
+			return payload
 
 	async def main(self):
 		async with aiohttp.ClientSession() as session:
