@@ -37,7 +37,7 @@ async def on_message():
 				print("Nothing to report")
 		else:
 			print(datetime.now())
-		await asyncio.sleep(1)
+		await asyncio.sleep(2)
 
 
 client.run(TOKEN)
