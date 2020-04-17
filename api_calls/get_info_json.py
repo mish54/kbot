@@ -1,22 +1,22 @@
 import aiohttp
-from aiohttp.client_exceptions import ClientConnectionError
-import io
 from json import JSONDecodeError
 import json
 from api_calls.image_builder import get_images
 import random
+from aiohttp.client_exceptions import ClientPayloadError
+
 
 class Kills:
-	def __init__(self):
+	def __init__(self, guild_id):
 		self.already_displayed = []
 		self.kill_messages = {
 			1: "Za Moc a Slavu!",
-		    2: "Za vetsi slavu gildy!",
-		    3: "Chvalte Brychtezena!",
-		    3: "Smrt nepratelum!",
-		    4: "Baf!",
-		    5: "Smrt Msicim Lidem!"
-		                      }
+			2: "Za vetsi slavu gildy!",
+			3: "Chvalte Brychtezena!",
+			3: "Smrt nepratelum!",
+			4: "Baf!",
+			5: "Smrt Msicim Lidem!"
+		}
 		self.victim_messages = {
 			1: "Slabi nebudou diktovat!",
 			2: "Takova potupa!",
@@ -25,23 +25,29 @@ class Kills:
 			4: "Zalez do naplaveniny!",
 			5: "Jezisi to je takova bolest,\n tak ukrutna bolest!!\n AAAAA!!!"
 		}
-		self.guild_id = "uatVVzFyQjqf_H_Bfl8i2A"
+		self.guild_id = guild_id
 
 	@staticmethod
 	async def fetch(session, url):
 		async with session.get(url) as response:
-			return await response.text()
+			try:
+				assert response.status == 200
+			except AssertionError:
+				print(f"Response recieved: {response.status}")
+
+			try:
+				payload = await response.read()
+			except ClientPayloadError:
+				print("Got payload exception")
+			return payload
 
 	async def main(self):
 		async with aiohttp.ClientSession() as session:
+			html = await Kills.fetch(session,
+			                         'https://gameinfo.albiononline.com/api/gameinfo/events?limit=51&offset=0'
+			                         )
 			try:
-				html = await Kills.fetch(session,
-				                         'https://gameinfo.albiononline.com/api/gameinfo/events?limit=51&offset=0')
-			except:
-				print("Client exception error, continuing...")
-				pass
-			try:
-				json_out = json.loads(html)
+				json_out = json.loads(html.decode("utf-8"))
 
 				for kill in json_out:
 
@@ -63,6 +69,7 @@ class Kills:
 					# clen guildy padnul v boji
 					elif kill["Victim"]["GuildId"] == self.guild_id and kill["EventId"] not in self.already_displayed:
 						print("We have a victim")
+
 						self.already_displayed.append(kill["EventId"])
 						image = get_image(kill, 1, self.victim_messages[random.randint(1,5)])
 						return image

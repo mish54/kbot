@@ -9,11 +9,12 @@ from api_calls.get_info_json import Kills
 # nastaveni enviromentu
 load_dotenv()
 
-kill = Kills()
-
 TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD = os.getenv("DISCORD_GUILD")
+GUILD_ID = os.getenv("GUILD_ID")
 client = discord.Client()
+
+kill = Kills(GUILD_ID)
 
 
 @client.event
@@ -37,8 +38,8 @@ async def on_message():
 			except discord.errors.HTTPException:
 				print("Nothing to report")
 		else:
-			print(str(datetime.now()) + ": No kill found.")
-		await asyncio.sleep(1)
+			print(datetime.now())
+		await asyncio.sleep(2)
 
 
 client.run(TOKEN)
