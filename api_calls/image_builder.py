@@ -3,46 +3,46 @@ from PIL import Image, ImageDraw, ImageFont, ImageColor
 from io import BytesIO
 
 
+def person_subimage(dest_img, person_list, offset_x, offset_y):
+    """ Funkce pro vytvoreni zmenu obrazku pro jednu osobu. """
+    for item in person_list["Equipment"]:
+        try:
+            response = requests.get(
+                f'https://gameinfo.albiononline.com/api/gameinfo/items/{person_list["Equipment"][item]["Type"]}?quality={person_list["Equipment"][item]["Quality"]}'
+            ).content
+            img1 = Image.open(BytesIO(response))
+            img1.thumbnail((64, 64))
+        # TODO: This is a wrong approach (using try except catch for this), devise a way how to do it better
+        except TypeError:
+            img1 = "Blank"
+
+        if img1 == "Blank":
+            pass
+        elif item == "Armor":
+            dest_img.paste(img1, (offset_x + 153, offset_y +  80))
+        elif item == "MainHand":
+            dest_img.paste(img1, (offset_x +  63, offset_y +  95))
+        elif item == "OffHand":
+            dest_img.paste(img1, (offset_x + 243, offset_y +  95))
+        elif item == "Head":
+            dest_img.paste(img1, (offset_x + 153, offset_y +   0))
+        elif item == "Shoes":
+            dest_img.paste(img1, (offset_x + 153, offset_y + 160))
+        elif item == "Bag":
+            dest_img.paste(img1, (offset_x +  53, offset_y +   5))
+        elif item == "Cape":
+            dest_img.paste(img1, (offset_x + 253, offset_y +   5))
+        elif item == "Mount":
+            dest_img.paste(img1, (offset_x + 153, offset_y + 240))
+        elif item == "Potion":
+            dest_img.paste(img1, (offset_x + 253, offset_y + 175))
+        elif item == "Food":
+            dest_img.paste(img1, (offset_x +  53, offset_y + 175))
+    return dest_img
+
+
 def get_image(kill, event_type, message):
     """ Funkce pro vytvoreni obrazku jednoho killu. """
-
-    def person_subimage(dest_img, person_list, offset_x, offset_y):
-        """ Funkce pro vytvoreni zmenu obrazku pro jednu osobu. """
-        for item in person_list["Equipment"]:
-            try:
-                response = requests.get(
-                    f'https://gameinfo.albiononline.com/api/gameinfo/items/{person_list["Equipment"][item]["Type"]}?quality={person_list["Equipment"][item]["Quality"]}'
-                ).content
-                img1 = Image.open(BytesIO(response))
-                img1.thumbnail((64, 64))
-            # TODO: This is a wrong approach (using try except catch for this), devise a way how to do it better
-            except TypeError:
-                img1 = "Blank"
-
-            if img1 == "Blank":
-                pass
-            elif item == "Armor":
-                dest_img.paste(img1, (offset_x + 153, offset_y +  80))
-            elif item == "MainHand":
-                dest_img.paste(img1, (offset_x +  63, offset_y +  95))
-            elif item == "OffHand":
-                dest_img.paste(img1, (offset_x + 243, offset_y +  95))
-            elif item == "Head":
-                dest_img.paste(img1, (offset_x + 153, offset_y +   0))
-            elif item == "Shoes":
-                dest_img.paste(img1, (offset_x + 153, offset_y + 160))
-            elif item == "Bag":
-                dest_img.paste(img1, (offset_x +  53, offset_y +   5))
-            elif item == "Cape":
-                dest_img.paste(img1, (offset_x + 253, offset_y +   5))
-            elif item == "Mount":
-                dest_img.paste(img1, (offset_x + 153, offset_y + 240))
-            elif item == "Potion":
-                dest_img.paste(img1, (offset_x + 253, offset_y + 175))
-            elif item == "Food":
-                dest_img.paste(img1, (offset_x +  53, offset_y + 175))
-        return dest_img
-
     dest = Image.open("./misc/gear.png")
     dest = person_subimage(dest, kill["Killer"], 0, 146)
     dest = person_subimage(dest, kill["Victim"], 675, 146)

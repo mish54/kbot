@@ -33,8 +33,7 @@ async def on_message():
 		if kills is not None:
 			try:
 				file = discord.File(kills, filename="kills.png")
-				if file is not None:
-					await channel.send("Kill.png", file=file)
+				await channel.send("Kill.png", file=file)
 			except discord.errors.HTTPException:
 				print("Nothing to report")
 		else:
